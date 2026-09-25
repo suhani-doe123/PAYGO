@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ff6b00">
+<meta name="description" content="Payko - Buy Now, Pay Later">
+<link rel="manifest" href="manifest.json">
+<title>Payko - Buy Now, Pay Later</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script type="module" src="app.js"></script>
+</head>
+
+<body>
+
+<!-- AUTH -->
+<div id="authScreen" class="auth-screen">
+
+  <div class="auth-card">
+
+    <div class="brand-large">
+      <div class="brand-icon">P</div>
+      <div>
+        <h1>Payko</h1>
+        <p>Buy now. Pay later.</p>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+
+      <h2>Welcome back</h2>
+      <p class="muted">Login to continue to Payko</p>
+
+      <label>Email</label>
+      <input id="loginEmail" type="email" placeholder="Enter email">
+
+      <label>Password</label>
+      <input id="loginPassword" type="password" placeholder="Enter password">
+
+      <button id="loginBtn" class="primary-btn full">
+        Login
+      </button>
+
+      <p class="auth-switch">
+        Don't have an account?
+        <button id="showRegisterBtn">Create account</button>
+      </p>
+
+    </div>
+
+
+    <!-- REGISTER -->
+    <div id="registerBox" class="hidden">
+
+      <h2>Create account</h2>
+      <p class="muted">Join Payko today</p>
+
+      <label>Full Name</label>
+      <input id="regName" placeholder="Your name">
+
+      <label>Email</label>
+      <input id="regEmail" type="email" placeholder="Email address">
+
+      <label>Password</label>
+      <input id="regPassword" type="password" placeholder="Minimum 6 characters">
+
+      <label>Account Type</label>
+
+      <select id="regRole">
+        <option value="customer">Customer</option>
+        <option value="merchant">Merchant</option>
+      </select>
+
+      <button id="registerBtn" class="primary-btn full">
+        Create Account
+      </button>
+
+      <p class="auth-switch">
+        Already have an account?
+        <button id="showLoginBtn">Login</button>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- APPLICATION -->
+<div id="app" class="hidden">
+
+<header class="topbar">
+
+  <div class="logo">
+    <div class="logo-mark">P</div>
+    <span>Payko</span>
+  </div>
+
+  <div class="header-search">
+    <input
+      id="globalSearch"
+      placeholder="Search products..."
+    >
+  </div>
+
+  <div class="header-right">
+
+    <button id="notificationBtn" class="icon-btn">
+      🔔
+    </button>
+
+    <button id="profileBtn" class="profile-mini">
+      <span id="userInitial">U</span>
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+  <div class="user-mini">
+
+    <div id="sideAvatar" class="avatar">
+      U
+    </div>
+
+    <div>
+      <strong id="sideName">User</strong>
+      <small id="sideRole">Customer</small>
+    </div>
+
+  </div>
+
+
+  <!-- CUSTOMER -->
+
+  <div id="customerMenu">
+
+    <button class="side-link active" data-page="homePage">
+      🏠 <span>Home</span>
+    </button>
+
+    <button class="side-link" data-page="creditPage">
+      💳 <span>My Credit</span>
+    </button>
+
+    <button class="side-link" data-page="storesPage">
+      🏪 <span>Stores</span>
+    </button>
+
+    <button class="side-link" data-page="shopPage">
+      🛍️ <span>Shop</span>
+    </button>
+
+    <button class="side-link" data-page="cartPage">
+      🛒 <span>Cart</span>
+      <b id="cartBadge">0</b>
+    </button>
+
+    <button class="side-link" data-page="ordersPage">
+      📋 <span>Purchases</span>
+    </button>
+
+    <button class="side-link" data-page="profilePage">
+      👤 <span>Profile</span>
+    </button>
+
+  </div>
+
+
+  <!-- MERCHANT -->
+
+  <div id="merchantMenu" class="hidden">
+
+    <button class="side-link active" data-page="merchantDashboard">
+      📊 <span>Dashboard</span>
+    </button>
+
+    <button class="side-link" data-page="merchantOrders">
+      📦 <span>Orders</span>
+    </button>
+
+    <button class="side-link" data-page="merchantProducts">
+      🛍️ <span>Products</span>
+    </button>
+
+    <button class="side-link" data-page="merchantCustomers">
+      👥 <span>Customers</span>
+    </button>
+
+    <button class="side-link" data-page="merchantEarnings">
+      💰 <span>Earnings</span>
+    </button>
+
+  </div>
+
+
+  <!-- ADMIN -->
+
+  <div id="adminMenu" class="hidden">
+
+    <button class="side-link active" data-page="adminDashboard">
+      📊 <span>Dashboard</span>
+    </button>
+
+    <button class="side-link" data-page="adminCustomers">
+      👥 <span>Customers</span>
+    </button>
+
+    <button class="side-link" data-page="adminMerchants">
+      🏪 <span>Merchants</span>
+    </button>
+
+    <button class="side-link" data-page="adminOrders">
+      📦 <span>Orders</span>
+    </button>
+
+    <button class="side-link" data-page="adminPayments">
+      💳 <span>Payments</span>
+    </button>
+
+  </div>
+
+
+  <button id="logoutBtn" class="side-link logout-link">
+    🚪 <span>Logout</span>
+  </button>
+
+</aside>
+
+
+<!-- CONTENT -->
+
+<main class="content">
+
+
+<!-- CUSTOMER HOME -->
+
+<section id="homePage" class="page">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">WELCOME BACK</p>
+
+      <h1>
+        Hello,
+        <span id="welcomeName">User</span> 👋
+      </h1>
+
+      <p class="muted">
+        Shop today and manage your payments with Payko.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="credit-hero">
+
+    <div>
+
+      <span>Available to spend</span>
+
+      <h2 id="availableCredit">
+        Rs. 100,000
+      </h2>
+
+      <p>Pay in 3 or Pay in 4</p>
+
+    </div>
+
+    <div class="credit-circle">
+
+      <strong id="creditPercent">
+        100%
+      </strong>
+
+      <small>available</small>
+
+    </div>
+
+  </div>
+
+
+  <div class="quick-grid">
+
+    <button data-page="creditPage">
+      <span>💳</span>
+      <strong>My Credit</strong>
+      <small>View limit</small>
+    </button>
+
+    <button data-page="storesPage">
+      <span>🏪</span>
+      <strong>Stores</strong>
+      <small>Find stores</small>
+    </button>
+
+    <button data-page="shopPage">
+      <span>🛍️</span>
+      <strong>Shop</strong>
+      <small>Browse products</small>
+    </button>
+
+    <button data-page="ordersPage">
+      <span>📋</span>
+      <strong>Purchases</strong>
+      <small>Payment history</small>
+    </button>
+
+  </div>
+
+
+  <div class="section-title">
+
+    <h2>Next payment</h2>
+
+    <button data-page="ordersPage">
+      View all
+    </button>
+
+  </div>
+
+  <div id="nextPayment"></div>
+
+
+  <div class="promo">
+
+    <div>
+
+      <span>PAYKO</span>
+
+      <h2>
+        Buy what you need today.
+      </h2>
+
+      <p>
+        Split your payment into easy installments.
+      </p>
+
+      <button data-page="shopPage">
+        Start shopping
+      </button>
+
+    </div>
+
+    <div class="promo-icon">
+      💳
+    </div>
+
+  </div>
+
+
+  <div class="section-title">
+
+    <h2>Popular stores</h2>
+
+    <button data-page="storesPage">
+      See all
+    </button>
+
+  </div>
+
+  <div id="homeStores" class="store-grid"></div>
+
+
+  <div class="section-title">
+
+    <h2>Popular products</h2>
+
+    <button data-page="shopPage">
+      See all
+    </button>
+
+  </div>
+
+  <div id="homeProducts" class="product-grid"></div>
+
+</section>
+
+
+<!-- CREDIT -->
+
+<section id="creditPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">PAYKO CREDIT</p>
+      <h1>My Credit</h1>
+    </div>
+
+  </div>
+
+
+  <div class="credit-large">
+
+    <div>
+
+      <span>Available to spend</span>
+
+      <h1 id="creditAvailableLarge">
+        Rs. 100,000
+      </h1>
+
+    </div>
+
+
+    <div class="credit-details">
+
+      <div>
+        <small>Credit limit</small>
+        <strong id="creditLimit">
+          Rs. 100,000
+        </strong>
+      </div>
+
+      <div>
+        <small>Used</small>
+        <strong id="creditUsed">
+          Rs. 0
+        </strong>
+      </div>
+
+      <div>
+        <small>Outstanding</small>
+        <strong id="creditOutstanding">
+          Rs. 0
+        </strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- STORES -->
+
+<section id="storesPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">SHOP WITH PAYKO</p>
+      <h1>Stores</h1>
+    </div>
+
+  </div>
+
+
+  <div class="filters">
+
+    <input
+      id="storeSearch"
+      placeholder="Search stores..."
+    >
+
+    <select id="storeCategory">
+
+      <option value="all">
+        All categories
+      </option>
+
+      <option>Electronics</option>
+      <option>Fashion</option>
+      <option>Beauty</option>
+      <option>Home</option>
+      <option>Food</option>
+
+    </select>
+
+  </div>
+
+
+  <div id="storesGrid" class="store-grid"></div>
+
+</section>
+
+
+<!-- SHOP -->
+
+<section id="shopPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">PAYKO MARKETPLACE</p>
+      <h1>Shop</h1>
+    </div>
+
+  </div>
+
+
+  <div class="filters">
+
+    <input
+      id="productSearch"
+      placeholder="Search products..."
+    >
+
+    <select id="productCategory">
+
+      <option value="all">
+        All categories
+      </option>
+
+      <option>Electronics</option>
+      <option>Fashion</option>
+      <option>Beauty</option>
+      <option>Home</option>
+      <option>Food</option>
+
+    </select>
+
+  </div>
+
+
+  <div id="productsGrid" class="product-grid"></div>
+
+</section>
+
+
+<!-- PRODUCT -->
+
+<section id="productPage" class="page hidden">
+
+  <div id="productDetails"></div>
+
+</section>
+
+
+<!-- CART -->
+
+<section id="cartPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">YOUR BAG</p>
+      <h1>Cart</h1>
+    </div>
+
+  </div>
+
+  <div id="cartContent"></div>
+
+</section>
+
+
+<!-- CHECKOUT -->
+
+<section id="checkoutPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">CHECKOUT</p>
+      <h1>Payment plan</h1>
+    </div>
+
+  </div>
+
+  <div id="checkoutContent"></div>
+
+</section>
+
+
+<!-- ORDERS -->
+
+<section id="ordersPage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">PAYMENT HISTORY</p>
+      <h1>My Purchases</h1>
+    </div>
+
+  </div>
+
+  <div id="ordersContent"></div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profilePage" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">ACCOUNT</p>
+      <h1>Profile</h1>
+    </div>
+
+  </div>
+
+
+  <div class="profile-card">
+
+    <div id="profileAvatar" class="profile-avatar">
+      U
+    </div>
+
+    <h2 id="profileName">
+      User
+    </h2>
+
+    <p id="profileEmail">
+      user@email.com
+    </p>
+
+    <span id="profileRole" class="role-pill">
+      Customer
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- MERCHANT DASHBOARD -->
+
+<section id="merchantDashboard" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+
+      <p class="eyebrow">MERCHANT PANEL</p>
+
+      <h1>Dashboard</h1>
+
+      <p class="muted">
+        Manage your Payko store.
+      </p>
+
+    </div>
+
+    <button
+      id="merchantAddProductBtn"
+      class="primary-btn">
+      + Add Product
+    </button>
+
+  </div>
+
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <span>💰</span>
+      <small>Total Sales</small>
+      <strong id="merchantSales">
+        Rs. 0
+      </strong>
+    </div>
+
+    <div class="stat-card">
+      <span>📦</span>
+      <small>Orders</small>
+      <strong id="merchantOrderCount">
+        0
+      </strong>
+    </div>
+
+    <div class="stat-card">
+      <span>👥</span>
+      <small>Customers</small>
+      <strong>
+        —
+      </strong>
+    </div>
+
+    <div class="stat-card">
+      <span>💳</span>
+      <small>Payko Orders</small>
+      <strong id="merchantPaykoOrders">
+        0
+      </strong>
+    </div>
+
+  </div>
+
+
+  <div class="dashboard-card">
+
+    <div class="section-title">
+      <h2>Recent orders</h2>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Plan</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="merchantOrdersTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MERCHANT ORDERS -->
+
+<section id="merchantOrders" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">MERCHANT</p>
+      <h1>Orders</h1>
+    </div>
+
+  </div>
+
+  <div class="dashboard-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Plan</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="merchantOrdersFull"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MERCHANT PRODUCTS -->
+
+<section id="merchantProducts" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">MERCHANT</p>
+      <h1>Products</h1>
+    </div>
+
+    <button id="merchantProductAdd" class="primary-btn">
+      + Add Product
+    </button>
+
+  </div>
+
+  <div id="merchantProductsGrid" class="product-grid"></div>
+
+</section>
+
+
+<!-- MERCHANT CUSTOMERS -->
+
+<section id="merchantCustomers" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">MERCHANT</p>
+      <h1>Customers</h1>
+    </div>
+
+  </div>
+
+  <div id="merchantCustomersGrid"></div>
+
+</section>
+
+
+<!-- MERCHANT EARNINGS -->
+
+<section id="merchantEarnings" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">MERCHANT</p>
+      <h1>Earnings</h1>
+    </div>
+
+  </div>
+
+  <div class="earnings-card">
+
+    <span>Total earnings</span>
+
+    <h1 id="merchantEarningsTotal">
+      Rs. 0
+    </h1>
+
+    <p>
+      From Payko orders
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ADMIN DASHBOARD -->
+
+<section id="adminDashboard" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+
+      <p class="eyebrow">ADMIN PANEL</p>
+
+      <h1>Dashboard</h1>
+
+      <p class="muted">
+        Payko platform overview.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <span>👥</span>
+      <small>Customers</small>
+      <strong id="adminCustomersCount">0</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>🏪</span>
+      <small>Merchants</small>
+      <strong id="adminMerchantsCount">0</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>📦</span>
+      <small>Orders</small>
+      <strong id="adminOrdersCount">0</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>💰</span>
+      <small>Transaction volume</small>
+      <strong id="adminVolume">Rs. 0</strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ADMIN CUSTOMERS -->
+
+<section id="adminCustomers" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">ADMIN</p>
+      <h1>Customers</h1>
+    </div>
+
+  </div>
+
+  <div class="dashboard-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="adminCustomersTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ADMIN MERCHANTS -->
+
+<section id="adminMerchants" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">ADMIN</p>
+      <h1>Merchants</h1>
+    </div>
+
+  </div>
+
+  <div id="adminMerchantsGrid" class="merchant-admin-grid"></div>
+
+</section>
+
+
+<!-- ADMIN ORDERS -->
+
+<section id="adminOrders" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">ADMIN</p>
+      <h1>Orders</h1>
+    </div>
+
+  </div>
+
+  <div class="dashboard-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Plan</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="adminOrdersTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ADMIN PAYMENTS -->
+
+<section id="adminPayments" class="page hidden">
+
+  <div class="page-head">
+
+    <div>
+      <p class="eyebrow">ADMIN</p>
+      <h1>Payments</h1>
+    </div>
+
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <small>Total transaction volume</small>
+      <strong id="paymentVolume">
+        Rs. 0
+      </strong>
+    </div>
+
+    <div class="stat-card">
+      <small>Total orders</small>
+      <strong id="paymentOrders">
+        0
+      </strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+</div>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="mobile-nav">
+
+  <button data-page="homePage">
+    🏠
+    <span>Home</span>
+  </button>
+
+  <button data-page="storesPage">
+    🏪
+    <span>Stores</span>
+  </button>
+
+  <button data-page="shopPage">
+    🛍️
+    <span>Shop</span>
+  </button>
+
+  <button data-page="ordersPage">
+    📋
+    <span>Purchases</span>
+  </button>
+
+  <button data-page="profilePage">
+    👤
+    <span>Profile</span>
+  </button>
+
+</nav>
+
+
+<div id="toastBox"></div>
+
+</body>
+</html>
